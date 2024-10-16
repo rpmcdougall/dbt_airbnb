@@ -1,0 +1,76 @@
+semantic_models:
+  
+  - name: unified_reviews_model
+    model: ref('unified_reviews')
+    description: Semantic model for derving metrics across airbnb dataset
+    defaults:
+      agg_time_dimension: review_date
+
+    # Entities such as primary, foreign, natural, and unique
+    entities:
+      - name: review
+        type: primary
+        expr: review_id
+      - name: listing
+        type: foreign
+        expr: listing_id
+      - name: host
+        type: foreign
+        expr: host_id
+    
+    # Columns to group by
+    # Using the review_date as our time dimension to aggregate over and doing sums on the sentiment+is_full_moon
+    dimensions:
+      - name: review_sentiment
+        type: categorical
+        description: Sentiment value that can be of value positive, negative, neutral or null
+      - name: full_moon_review
+        type: categorical
+        description: Indicates whether the review happened on a day following a full moon
+      - name: review_date
+        type: time
+        description: Date review was submitted, used as minimum time granularity
+        type_params:
+          time_granularity: day
+
+    # Calculations on dimensions
+    # utilizing our query from analyses folder to pull together the columns
+    measures:
+      - name: positive_review_count
+        description: Number of positive reviews
+        label: Number of positive reviews
+        expr: case when review_sentiment = 'positive'
+        agg: count
+      - name: full_moon_negative_count
+        description: Number of negative reviews that occured on a date when there was a full moon
+        label: Full moon negative reviews count
+        expr: case when review_sentiment = 'negative' and full_moon_review is true then 1 else 0
+        agg: count
+
+metrics:
+  - name: positive_review_count
+    description: Number of positive reviews
+    label: Positive reviews count
+    type: simple
+    type_params:
+      measure:
+        name: positive_review_count 
+        join_to_timespine: true
+  - name: full_moon_negative_count
+    description: Number of negative reviews that occured on a date when there was a full moon
+    label: Full moon negative reviews count
+    type: simple
+    type_params:
+      measure:
+        name: full_moon_negative_count 
+        join_to_timespine: true
+  - name: full_moon_negative_rolling_1_mo
+    type: cumulative
+    label: Rolling total of the amount of negative reviews on full moons in the last 30 days
+    type_params:
+      cumulative_type_params:
+        period_agg: first
+        window: 30 days
+      measure:
+        name: full_moon_negative_count
+        join_to_timespine: true

@@ -1,0 +1,12 @@
+version: 2
+
+macros:
+  - name: op_incremental_load_reviews
+    description: Simulates small incremental loads on the reviews table. This macro is configured to be called on a schedule job.
+    docs:
+      show: true
+  
+  - name: op_scd_update_listings_price
+    description: Simulates price changes to listings table to show use of snapshotting/scd type 2 changes.
+    docs:
+      show: true

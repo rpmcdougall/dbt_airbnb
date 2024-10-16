@@ -1,0 +1,116 @@
+version: 2
+sources:
+  - name: airbnb
+    database: bronze
+    schema: airbnb
+    description: Raw data ingested for airbnb hosts, listings and review data
+    tables:
+      - name: raw_hosts
+        description: Airbnb hosts
+        freshness:
+          warn_after:
+            count: 900
+            period: day
+          error_after:
+            count: 1500
+            period: day
+        loaded_at_field: updated_at
+        columns:
+          - name: id
+            description: Host ID
+            data_tests:
+              - unique
+              - not_null
+          - name: name
+            description: Host name
+          - name: is_superhost
+            description: Boolean of whether host is superhost
+            data_tests:
+              - accepted_values:
+                  values: ['t', 'f']
+          - name: created_at
+            description: Host created at ETL field
+            data_tests:
+              - not_null
+          - name: updated_at
+            description: Host updated at ETL field
+            data_tests:
+              - not_null
+      
+      - name: raw_listings
+        description: Airbnb listings
+        freshness:
+          warn_after:
+            count: 1
+            period: day
+          error_after:
+            count: 2
+            period: day
+        loaded_at_field: updated_at
+        columns:
+          - name: id
+            description: Listing ID
+            data_tests:
+              - not_null
+          - name: listing_url
+            description: Listing URL
+            data_tests:
+              - not_null
+          - name: name
+            description: Listing description
+            data_tests:
+              - not_null
+          - name: room_type
+            description: Listing room type
+            data_tests:
+              - not_null
+              - accepted_values:
+                  values: ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']
+          - name: minimum_nights
+            description: Listing minimum nights you must stay
+            data_tests:
+              - not_null
+          - name: host_id
+            description: Listing host ID
+            data_tests:
+              - not_null
+          - name: price
+            description: Listing price
+            data_tests:
+              - not_null
+          - name: created_at
+            description: Listing created at ETL field
+            data_tests:
+              - not_null
+          - name: updated_at
+            description: Listing updated at ETL field
+            data_tests:
+              - not_null
+      
+      - name: raw_reviews
+        description: Airbnb reviews
+        columns:
+          - name: id
+            description: Review ID
+            data_tests:
+              - not_null
+              - unique
+          - name: listing_id
+            description: Review listing ID
+            data_tests:
+              - not_null
+          - name: date
+            description: Review date
+            data_tests:
+              - not_null
+          - name: reviewer_name
+            description: Reviewer name
+            data_tests:
+              - not_null
+          - name: comments
+            description: Review text
+          - name: sentiment
+            description: Review sentiment (positive, negative, neutral)
+            data_tests:
+              - accepted_values:
+                  values: ['neutral', 'negative', 'positive']

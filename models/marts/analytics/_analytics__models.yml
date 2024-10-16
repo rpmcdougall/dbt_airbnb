@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: unified_reviews
+    description: Reviews with host, listing, & full moon information
+    columns:
+      - name: review_id
+        description: Review ID
+        data_tests:
+          - unique
+          - not_null
+      - name: review_date
+        description: Review date
+        data_tests:
+          - not_null
+      - name: review_text
+        description: Review text
+      - name: review_sentiment
+        description: Review sentiment (positive, negative, neutral)
+        data_tests:
+          - accepted_values:
+              values: ['neutral', 'negative', 'positive']
+      - name: full_moon_review
+        description: Boolean of whether review occured after full moon
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [True, False]
+      - name: listing_id
+        description: Listing ID
+        data_tests:
+          - not_null
+      - name: listing_url
+        description: Listing URL
+        data_tests:
+          - not_null
+      - name: listing_name
+        description: Listing description
+        data_tests:
+          - not_null
+      - name: room_type
+        description: Listing room type
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']
+      - name: minimum_nights
+        description: Listing minimum nights you must stay
+        data_tests:
+          - not_null
+      - name: listing_price_usd
+        description: Listing price in USD
+        data_tests:
+          - not_null
+      - name: host_id
+        description: Host ID
+        data_tests:
+          - not_null
+      - name: host_name
+        description: Host name
+        data_tests:
+          -  not_null
+      - name: is_superhost
+        description: Boolean of whether host is superhost
+        data_tests:
+          - accepted_values:
+              values: [True, False]
+
+exposures:
+  - name: unified_reviews_dashboard
+    label: Unified Reviews PowerBI Dashboard
+    type: dashboard
+    maturity: high
+    url: https://app.powerbi.com/groups/me/apps/guid/ReportSection
+    description: >
+      Unified host reviews presented in a PowerBI dashboard
+    depends_on:
+      - ref('unified_reviews')
+    owner:
+      name: Noah Schneider
+      email: noah.schneider@improving.com

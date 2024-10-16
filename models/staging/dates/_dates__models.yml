@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: stg_dates__full_moon_dates
+    description: Full moon dates from 2009 to 2031
+    columns:
+      - name: full_moon_review_date
+        description: Day after full moon to check for reviews from
+        data_tests:
+        - not_null
+        - unique

@@ -1,0 +1,99 @@
+version: 2
+
+models:
+  - name: stg_airbnb__hosts
+    description: Airbnb hosts
+    columns:
+      - name: host_id
+        description: Host ID
+        data_tests:
+          - unique
+          - not_null
+      - name: host_name
+        description: Host name
+        data_tests:
+          -  not_null
+      - name: is_superhost
+        description: Boolean of whether host is superhost
+        data_tests:
+          - accepted_values:
+              values: [True, False]
+      - name: created_at
+        description: Host created at ETL field
+        data_tests:
+          - not_null
+      - name: updated_at
+        description: Host updated at ETL field
+        data_tests:
+          - not_null
+          
+  - name: stg_airbnb__listings
+    description: Airbnb listings
+    columns:
+      - name: listing_id
+        description: Listing ID
+        data_tests:
+          - unique
+          - not_null
+      - name: listing_url
+        description: Listing URL
+        data_tests:
+          - not_null
+      - name: listing_name
+        description: Listing description
+        data_tests:
+          - not_null
+      - name: room_type
+        description: Listing room type
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']
+      - name: minimum_nights
+        description: Listing minimum nights you must stay
+        data_tests:
+          - not_null
+      - name: host_id
+        description: Listing host ID
+        data_tests:
+          - not_null
+      - name: listing_price_usd
+        description: Listing price in USD
+        data_tests:
+          - not_null
+      - name: created_at
+        description: Listing created at ETL field
+        data_tests:
+          - not_null
+      - name: updated_at
+        description: Listing updated at ETL field
+        data_tests:
+          - not_null
+
+  - name: stg_airbnb__reviews
+    description: Airbnb reviews
+    columns:
+      - name: review_id
+        description: Review ID
+        data_tests:
+          - not_null
+          - unique
+      - name: listing_id
+        description: Review listing ID
+        data_tests:
+          - not_null
+      - name: review_date
+        description: Review date
+        data_tests:
+          - not_null
+      - name: reviewer_name
+        description: Reviewer name
+        data_tests:
+          - not_null
+      - name: review_text
+        description: Review text
+      - name: review_sentiment
+        description: Review sentiment (positive, negative, neutral)
+        data_tests:
+          - accepted_values:
+              values: ['neutral', 'negative', 'positive']

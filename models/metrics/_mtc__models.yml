@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: metricflow_time_spine
+    description: Metricflow time spine as required for semantic model
+    columns:
+      - name: date_day
+        description: Date
+        data_tests:
+          - unique
+          - not_null

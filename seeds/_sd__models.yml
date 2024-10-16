@@ -1,0 +1,11 @@
+version: 2
+
+seeds:
+  - name: sd__full_moon_dates
+    description: Full moon dates from 2009 to 2031 
+    columns:
+      - name: full_moon_date
+        description: Date of full moon
+        data_tests:
+        - not_null
+        - unique

@@ -1,0 +1,5 @@
+macros:
+  - name: generate_schema_name
+    description: Modified version of the default generate_schema_name macro to allow desired use of custom schema names
+    docs:
+      show: true

@@ -1,0 +1,61 @@
+
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: dbt_airbnb
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: default
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+on-run-start: "{{ op_scd_update_listings_price() }}"
+on-run-end:
+  - "{% if target.name == 'prod' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}"
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+seeds:
+  +schema: airbnb
+
+snapshots:
+  +target_schema: airbnb_dbt
+
+models:
+  dbt_airbnb:
+    staging:
+      +database: silver
+      +schema: airbnb
+    intermediate:
+      +database: silver
+      +schema: airbnb
+      +materialized: ephemeral
+    marts:
+      +database: gold
+      +schema: airbnb
+      +materialized: table
+      analytics:
+        +group: analytics-team
+    metrics:
+      +materialized: table
+      +database: gold
+      +schema: airbnb_dbt
+  dbt_artifacts:
+    +database: gold
+    +schema: airbnb_dbt

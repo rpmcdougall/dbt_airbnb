@@ -1,0 +1,48 @@
+version: 2
+
+snapshots:
+  - name: snp__listings
+    config:
+      strategy: timestamp
+      unique_key: id
+      updated_at: updated_at
+      invalidate_hard_deletes: True
+    columns:
+      - name: id
+        description: Listing ID
+        data_tests:
+          - not_null
+      - name: listing_url
+        description: Listing URL
+        data_tests:
+          - not_null
+      - name: name
+        description: Listing description
+        data_tests:
+          - not_null
+      - name: room_type
+        description: Listing room type
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']
+      - name: minimum_nights
+        description: Listing minimum nights you must stay
+        data_tests:
+          - not_null
+      - name: host_id
+        description: Listing host ID
+        data_tests:
+          - not_null
+      - name: price
+        description: Listing price
+        data_tests:
+          - not_null
+      - name: created_at
+        description: Listing created at ETL field
+        data_tests:
+          - not_null
+      - name: updated_at
+        description: Listing updated at ETL field
+        data_tests:
+          - not_null
