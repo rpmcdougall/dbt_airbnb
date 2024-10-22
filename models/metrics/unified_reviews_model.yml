@@ -39,12 +39,12 @@ semantic_models:
       - name: positive_review_count
         description: Number of positive reviews
         label: Number of positive reviews
-        expr: case when review_sentiment = 'positive'
+        expr: case when review_sentiment = 'positive';
         agg: count
       - name: full_moon_negative_count
         description: Number of negative reviews that occured on a date when there was a full moon
         label: Full moon negative reviews count
-        expr: case when review_sentiment = 'negative' and full_moon_review = true then 1 else 0
+        expr: case when review_sentiment = 'negative' and full_moon_review = true then 1 else 0;
         agg: count
 
 metrics:
