@@ -77,5 +77,5 @@ exposures:
     depends_on:
       - ref('unified_reviews')
     owner:
-      name: Noah Schneider
-      email: noah.schneider@improving.com
+      name: Ryan McDougall
+      email: rmcdougall@boldorange.com
